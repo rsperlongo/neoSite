@@ -1,4 +1,4 @@
-<?php 
+<!-- <?php 
 $to = 'ricardo.sperlongo@gmail.com'; // Put in your email address here
 $subject  = "Contact Us Form"; // The default subject. Will appear by default in all messages. Change this if you want.
 
@@ -25,5 +25,34 @@ if($mail) {
 	header("Location:index.html");	
 } else {
 	echo 'Message could not be sent!';   //This is the message that will be shown when an error occured: the message was not send
+}
+?> -->
+
+
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nome = htmlspecialchars(trim($_POST['nome']));
+    $email = htmlspecialchars(trim($_POST['email']));
+    $telefone = htmlspecialchars(trim($_POST['telefone']));
+    $mensagem = htmlspecialchars(trim($_POST['mensagem']));
+
+    // Validação básica
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        die("E-mail inválido.");
+    }
+
+    // Aqui você pode processar os dados, como enviar um e-mail
+    $to = "ricardo.sperlongo@eixotechinovacao.com.br"; // Substitua pelo seu e-mail
+    $subject = "Novo contato de " . $nome;
+    $body = "Nome: $nome\nE-mail: $email\nTelefone: $telefone\nMensagem:\n$mensagem";
+    $headers = "From: $email";
+
+    if (mail($to, $subject, $body, $headers)) {
+        echo "Mensagem enviada com sucesso!";
+    } else {
+        echo "Falha ao enviar a mensagem.";
+    }
+} else {
+    echo "Método de requisição inválido.";
 }
 ?>
